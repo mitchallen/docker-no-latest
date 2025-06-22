@@ -6,24 +6,13 @@ run:
 	node server.js
 
 # Define the publish target
+.PHONY: publish
 publish:
 	@echo "Switching to main branch..."
 	git checkout main
 	@echo "Incrementing version..."
-	@current_version=$(npm pkg get version | tr -d '"'); \
-	next_version=$(npm version patch --no-git-tag-version); \
-	tag=v$$next_version; \
-	if git rev-parse "v$$next_version" >/dev/null 2>&1; then \
-		echo "Tag v$$next_version already exists. Deleting..."; \
-		git tag -d v$$next_version; \
-		git push --delete origin v$$next_version || true; \
-	fi; \
-	echo "Committing version bump..."; \
-	echo "Version bump to $$next_version" > .version-bump-message; \
-	git add package.json package-lock.json; \
-	git commit -m "Bump version to $$next_version" || true; \
-	npm version $$next_version --git-tag-version; \
-	echo "Pushing changes and tags..."; \
+	npm version patch
+	@echo "Pushing changes and tags..."
 	git push && git push --tags
 
 docker-build:
