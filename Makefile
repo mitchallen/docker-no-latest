@@ -18,6 +18,10 @@ publish:
 		git tag -d v$$next_version; \
 		git push --delete origin v$$next_version || true; \
 	fi; \
+	echo "Committing version bump..."; \
+	echo "Version bump to $$next_version" > .version-bump-message; \
+	git add package.json package-lock.json; \
+	git commit -m "Bump version to $$next_version" || true; \
 	npm version $$next_version --git-tag-version; \
 	echo "Pushing changes and tags..."; \
 	git push && git push --tags
