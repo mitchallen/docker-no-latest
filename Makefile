@@ -10,8 +10,16 @@ publish:
 	@echo "Switching to main branch..."
 	git checkout main
 	@echo "Incrementing version..."
-	npm version patch
-	@echo "Pushing changes and tags..."
+	@current_version=$(npm pkg get version | tr -d '"'); \
+	next_version=$(npm version patch --no-git-tag-version); \
+	tag=v$$next_version; \
+	if git rev-parse "v$$next_version" >/dev/null 2>&1; then \
+		echo "Tag v$$next_version already exists. Deleting..."; \
+		git tag -d v$$next_version; \
+		git push --delete origin v$$next_version || true; \
+	fi; \
+	npm version $$next_version --git-tag-version; \
+	echo "Pushing changes and tags..."; \
 	git push && git push --tags
 
 docker-build:
