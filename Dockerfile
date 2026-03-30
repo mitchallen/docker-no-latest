@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14
+FROM node:22-alpine
 
 # Set the working directory to /app
 WORKDIR /app
@@ -12,6 +12,8 @@ RUN npm install
 
 # Copy the rest of the application code to the container
 COPY . .
+
+USER node
 
 # Set the container's default command to start the server
 CMD ["node", "server.js"]
