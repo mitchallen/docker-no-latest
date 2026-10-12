@@ -1,5 +1,8 @@
 # Use an official Node.js runtime as a parent image
-FROM node:24-alpine
+# Floating LTS tag: tracks the current Node LTS line automatically and, being
+# non-numeric, never triggers a Dependabot major-version PR (which would
+# propose odd or pre-LTS releases).
+FROM node:lts-alpine
 
 # Set the working directory to /app
 WORKDIR /app
