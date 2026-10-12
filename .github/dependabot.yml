@@ -1,0 +1,40 @@
+version: 2
+
+# Security alerts are on by default and are NOT configured here. This file adds
+# *version* updates, so routine bumps arrive as weekly PRs instead of only as
+# security fixes after a CVE. This repo has no PR CI, so build the image
+# locally (`docker build .`) before merging a bump.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: build(deps)
+    groups:
+      # Non-breaking bumps batched into one PR; majors stay individual.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: build(docker)
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns:
+          - "*"
